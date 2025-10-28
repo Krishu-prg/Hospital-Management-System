@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}Patient Dashboard | HMS{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h3 class="mb-0">Patient Dashboard</h3>
+  <a href="/appointments/" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Book Appointment</a>
+</div>
+
+<div class="row g-3">
+  <div class="col-lg-6">
+    <div class="card p-3 h-100">
+      <h5>Upcoming</h5>
+      <div class="table-responsive">
+        <table class="table table-sm align-middle">
+          <thead><tr><th>Doctor</th><th>Date</th><th>Time</th><th>Status</th></tr></thead>
+          <tbody>
+            {% for a in upcoming %}
+            <tr><td>{{ a.doctor }}</td><td>{{ a.date }}</td><td>{{ a.time }}</td><td>{{ a.status }}</td></tr>
+            {% empty %}
+            <tr><td colspan="4" class="text-center text-muted">No upcoming appointments.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6">
+    <div class="card p-3 h-100">
+      <h5>Recent Visits</h5>
+      <div class="table-responsive">
+        <table class="table table-sm align-middle">
+          <thead><tr><th>Doctor</th><th>Date</th><th>Time</th><th>Status</th></tr></thead>
+          <tbody>
+            {% for a in past %}
+            <tr><td>{{ a.doctor }}</td><td>{{ a.date }}</td><td>{{ a.time }}</td><td>{{ a.status }}</td></tr>
+            {% empty %}
+            <tr><td colspan="4" class="text-center text-muted">No past appointments.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <canvas id="chartPatient" height="120"></canvas>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script>
+const c3 = document.getElementById('chartPatient');
+if (c3) {
+  const labels = Array.from({length:6}, (_,i)=>`M${i+1}`);
+  new Chart(c3, { type: 'line', data: { labels, datasets: [{ label: 'Visits', data: labels.map(()=> Math.floor(Math.random()*6)), borderColor: '#6610f2' }]}});
+}
+</script>
+{% endblock %}
+
+

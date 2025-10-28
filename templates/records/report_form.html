@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Upload Report | HMS{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card p-3">
+      <h5 class="mb-3">Upload Report for Record {{ record.id }}</h5>
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="d-grid"><button class="btn btn-primary" type="submit">Upload</button></div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+

@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block title %}Appointments | HMS{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h4 class="mb-0">Appointments</h4>
+  {% if user.role == 'PATIENT' %}
+  <a class="btn btn-primary" href="{% url 'appointments:book' %}"><i class="bi bi-plus-circle"></i> Book</a>
+  {% endif %}
+</div>
+{% include 'appointments/_filters.html' %}
+<div class="card p-3">
+  <div class="table-responsive">
+    <table class="table table-sm align-middle">
+      <thead>
+        <tr><th>Patient</th><th>Doctor</th><th>Dept</th><th>Date</th><th>Time</th><th>Status</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for a in appointments %}
+        <tr>
+          <td>{{ a.patient }}</td>
+          <td>{{ a.doctor }}</td>
+          <td>{{ a.department }}</td>
+          <td>{{ a.date }}</td>
+          <td>{{ a.time }}</td>
+          <td>
+            <span class="badge {% if a.status == 'PENDING' %}text-bg-warning{% elif a.status == 'APPROVED' %}text-bg-primary{% elif a.status == 'COMPLETED' %}text-bg-success{% elif a.status == 'REJECTED' %}text-bg-danger{% else %}text-bg-secondary{% endif %}">{{ a.status }}</span>
+          </td>
+          <td class="text-end">
+            {% if user.is_superuser or user.role == 'ADMIN' %}
+              {% if a.status == 'PENDING' %}
+              <a class="btn btn-sm btn-success" href="{% url 'appointments:approve' a.pk %}"><i class="bi bi-check2"></i></a>
+              <a class="btn btn-sm btn-danger" href="{% url 'appointments:reject' a.pk %}"><i class="bi bi-x"></i></a>
+              {% endif %}
+            {% endif %}
+            {% if user.role == 'DOCTOR' and a.status == 'APPROVED' %}
+              <a class="btn btn-sm btn-primary" href="{% url 'appointments:complete' a.pk %}">Complete</a>
+            {% endif %}
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="7" class="text-center text-muted">No appointments found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+

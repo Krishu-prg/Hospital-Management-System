@@ -1,0 +1,28 @@
+<form class="row g-2 mb-3" method="get">
+  <div class="col-md-4">
+    <input class="form-control" type="search" name="q" value="{{ request.GET.q }}" placeholder="Search patient/doctor">
+  </div>
+  <div class="col-md-3">
+    <select class="form-select" name="dept">
+      <option value="">All Departments</option>
+      {% for d in departments %}
+      <option value="{{ d.id }}" {% if request.GET.dept == d.id|stringformat:'s' %}selected{% endif %}>{{ d.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-md-3">
+    <select class="form-select" name="status">
+      <option value="">All Status</option>
+      <option{% if request.GET.status == 'PENDING' %} selected{% endif %}>PENDING</option>
+      <option{% if request.GET.status == 'APPROVED' %} selected{% endif %}>APPROVED</option>
+      <option{% if request.GET.status == 'COMPLETED' %} selected{% endif %}>COMPLETED</option>
+      <option{% if request.GET.status == 'REJECTED' %} selected{% endif %}>REJECTED</option>
+      <option{% if request.GET.status == 'CANCELLED' %} selected{% endif %}>CANCELLED</option>
+    </select>
+  </div>
+  <div class="col-md-2">
+    <button class="btn btn-outline-secondary w-100" type="submit"><i class="bi bi-funnel"></i> Filter</button>
+  </div>
+</form>
+
+

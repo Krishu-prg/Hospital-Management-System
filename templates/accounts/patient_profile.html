@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Patient Profile | HMS{% endblock %}
+{% block content %}
+<div class="row g-3">
+  <div class="col-md-4">
+    <div class="card p-3 h-100">
+      <h5>{{ patient.get_full_name|default:patient.username }}</h5>
+      <div class="text-muted">{{ patient.patient_profile.get_gender_display }}</div>
+      <div class="small mt-2">DOB: {{ patient.patient_profile.date_of_birth }}</div>
+      <div class="small">Phone: {{ patient.patient_profile.phone }}</div>
+      <div class="small">Address: {{ patient.patient_profile.address }}</div>
+    </div>
+  </div>
+  <div class="col-md-8">
+    <div class="card p-3 h-100">
+      <h6>History</h6>
+      <a class="btn btn-outline-primary" href="/records/">View Records</a>
+      <a class="btn btn-primary ms-2" href="/appointments/">View Appointments</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+

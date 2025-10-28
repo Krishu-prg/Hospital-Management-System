@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% block title %}Admin Dashboard | HMS{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h3 class="mb-0">Admin Dashboard</h3>
+  <button id="themeToggle" class="btn btn-outline-secondary"><i class="bi bi-moon-stars"></i></button>
+  </div>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-3">
+    <div class="card p-3">
+      <div class="d-flex align-items-center">
+        <div class="flex-grow-1">
+          <div class="text-muted">Doctors</div>
+          <div class="fs-3 fw-bold">{{ total_doctors }}</div>
+        </div>
+        <i class="bi bi-person-badge fs-1 text-primary"></i>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card p-3">
+      <div class="d-flex align-items-center">
+        <div class="flex-grow-1">
+          <div class="text-muted">Patients</div>
+          <div class="fs-3 fw-bold">{{ total_patients }}</div>
+        </div>
+        <i class="bi bi-people fs-1 text-success"></i>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card p-3">
+      <div class="d-flex align-items-center">
+        <div class="flex-grow-1">
+          <div class="text-muted">Appointments</div>
+          <div class="fs-3 fw-bold">{{ total_appointments }}</div>
+        </div>
+        <i class="bi bi-calendar2-event fs-1 text-info"></i>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card p-3">
+      <div class="d-flex align-items-center">
+        <div class="flex-grow-1">
+          <div class="text-muted">Approval Queue</div>
+          <div class="fs-3 fw-bold">—</div>
+        </div>
+        <i class="bi bi-check2-square fs-1 text-warning"></i>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-lg-8">
+    <div class="card p-3 h-100">
+      <h5>Latest Appointments</h5>
+      <div class="table-responsive">
+        <table class="table table-sm align-middle">
+          <thead>
+            <tr>
+              <th>Patient</th>
+              <th>Doctor</th>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for a in latest_appointments %}
+            <tr>
+              <td>{{ a.patient }}</td>
+              <td>{{ a.doctor }}</td>
+              <td>{{ a.date }}</td>
+              <td>{{ a.time }}</td>
+              <td><span class="badge text-bg-light">{{ a.status }}</span></td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5" class="text-center text-muted">No appointments yet.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="card p-3 h-100">
+      <h5>Trends</h5>
+      <canvas id="chartMonthly" height="160"></canvas>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script>
+const ctx = document.getElementById('chartMonthly');
+if (ctx) {
+  fetch('/api/admin/appointments-per-month/')
+    .then(r=>r.json())
+    .then(({labels, values}) => {
+      new Chart(ctx, { type: 'line', data: { labels, datasets: [{ label: 'Appointments', data: values, borderColor: '#0d6efd' }]}, options: {responsive: true, maintainAspectRatio: false}});
+    });
+}
+</script>
+{% endblock %}
+
+

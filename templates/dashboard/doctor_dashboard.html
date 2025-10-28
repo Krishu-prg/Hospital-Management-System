@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Doctor Dashboard | HMS{% endblock %}
+{% block content %}
+<h3 class="mb-3">Doctor Dashboard</h3>
+<div class="card p-3 mb-3">
+  <h5>Todays Appointments</h5>
+  <div class="table-responsive">
+    <table class="table table-sm align-middle">
+      <thead><tr><th>Patient</th><th>Time</th><th>Status</th></tr></thead>
+      <tbody>
+        {% for a in todays_appointments %}
+        <tr><td>{{ a.patient }}</td><td>{{ a.time }}</td><td>{{ a.status }}</td></tr>
+        {% empty %}
+        <tr><td colspan="3" class="text-center text-muted">No appointments today.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <canvas id="chartDoctor" height="120"></canvas>
+  </div>
+{% endblock %}
+{% block extra_js %}
+<script>
+const c2 = document.getElementById('chartDoctor');
+if (c2) {
+  const labels = Array.from({length:8}, (_,i)=>`W${i+1}`);
+  new Chart(c2, { type: 'bar', data: { labels, datasets: [{ label: 'Patients treated', data: labels.map(()=> Math.floor(Math.random()*20)), backgroundColor: '#20c997' }]}});
+}
+</script>
+{% endblock %}
+
+

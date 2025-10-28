@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Doctor Profile | HMS{% endblock %}
+{% block content %}
+<div class="row g-3">
+  <div class="col-md-4">
+    <div class="card p-3 h-100">
+      <h5>{{ doctor.get_full_name|default:doctor.username }}</h5>
+      <div class="text-muted">{{ doctor.doctor_profile.specialization }}</div>
+      <div class="small mt-2">Room: {{ doctor.doctor_profile.room_number }}</div>
+      <div class="small">Phone: {{ doctor.doctor_profile.phone }}</div>
+    </div>
+  </div>
+  <div class="col-md-8">
+    <div class="card p-3 h-100">
+      <h6>About</h6>
+      <p class="text-muted">Experienced specialist providing comprehensive care.</p>
+      <a class="btn btn-primary" href="/appointments/?q={{ doctor.username }}">View Appointments</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
